@@ -1,8 +1,10 @@
+
 import pygame as pg
 import copy
-import tkinter as tk
-from tkinter import *
-from PIL import Image, ImageTk
+import Tkinter as tk
+from Tkinter import *
+import PIL
+from PIL import Image
 import cv2
 from Game_final import GameBoard
 
@@ -24,16 +26,17 @@ class setup_window:
         self.label=Label(self.frame_board_settings, text="Set up the game!")
         self.label.grid(columnspan=2)
 
+
+        self.rows=IntVar(None,6)
+        self.columns=IntVar(None,7)
+        self.connects=IntVar(None,4)
         self.rows_label=Label(self.frame_board_settings,text="Rows")
         self.cols_label=Label(self.frame_board_settings,text="Columns")
         self.connects_label=Label(self.frame_board_settings,text="Connects to win")
 
-        self.rows_label_input=Entry(self.frame_board_settings,justify='center')
-        self.cols_label_input=Entry(self.frame_board_settings,justify='center')
-        self.connects_label_input=Entry(self.frame_board_settings,justify='center')
-        self.rows_label_input.insert(0,6)
-        self.cols_label_input.insert(0,7)
-        self.connects_label_input.insert(0,4)
+        self.rows_label_input=Entry(self.frame_board_settings,justify='center',textvariable=self.rows)
+        self.cols_label_input=Entry(self.frame_board_settings,justify='center',textvariable=self.columns)
+        self.connects_label_input=Entry(self.frame_board_settings,justify='center',textvariable=self.connects)
 
         self.rows_label.grid(row=1,column=0,sticky="E")
         self.cols_label.grid(row=2,column=0,sticky="E")
@@ -66,10 +69,8 @@ class setup_window:
         self.button_height=20
         self.button_width=self.button_height
 
-        self.UpPhoto=ImageTk.PhotoImage(Image.open(r"C:\Users\computer\Documents\Python\Reinforcement Learning\Connect-5\open.jpg").resize((self.button_height,self.button_width)))
-        self.DownPhoto=ImageTk.PhotoImage(Image.open(r"C:\Users\computer\Documents\Python\Reinforcement Learning\Connect-5\close.jpg").resize((self.button_height,self.button_width)))
-
-
+        self.UpPhoto=PhotoImage(file="open.pgm")
+        self.DownPhoto=PhotoImage(file="close.pgm")
 
         self.player1vision= IntVar(None, 2)
         self.player2vision= IntVar(None, 2)
@@ -109,15 +110,16 @@ class setup_window:
         self.player1sims_intro_frame=Frame(self.frame_simulations_1)
         self.player2sims_intro_frame=Frame(self.frame_simulations_2)
 
+        self.player1sims=IntVar(None,1000)
         self.player1sims_intro=Label(self.frame_simulations_1,text="AI Simulations")
-        self.player1sims_input=Entry(self.player1sims_intro_frame,justify='center')
-        self.player1sims_input.insert(0,1000)
+        self.player1sims_input=Entry(self.player1sims_intro_frame,textvariable=self.player1sims,justify='center')
+        #self.player1sims_input.insert(0,1000)
         self.player1sims_intro.grid(row=0,column=0)
         self.player1sims_input.pack()
 
+        self.player2sims=IntVar(None,1000)
         self.player2sims_intro=Label(self.frame_simulations_2,text="AI Simulations")
-        self.player2sims_input=Entry(self.player2sims_intro_frame,justify='center')
-        self.player2sims_input.insert(0,1000)
+        self.player2sims_input=Entry(self.player2sims_intro_frame,textvariable=self.player2sims,justify='center')
 
         self.player2sims_intro.grid(row=0,column=0)
         self.player2sims_input.pack()
@@ -183,7 +185,7 @@ class setup_window:
         self.dummylabel=Label(self.frame_end_buttons,text="     ")
         self.dummylabel.grid(row=0)
         self.validate_button=Button(self.frame_end_buttons,text="Validate",command=self.validate,height = 1, width = 10)
-        self.play_button=Button(self.frame_end_buttons,text="Play",command=print("Omegalul lel kek egz di"),height = 1, width = 10)
+        self.play_button=Button(self.frame_end_buttons,text="Play",height = 1, width = 10)
         self.validate_button.grid(row=1,column=0,sticky="NSEW")
         self.play_button.grid(row=1,column=1,sticky="NSEW")
         self.frame_end_buttons.pack()
@@ -357,7 +359,7 @@ class connectGUI:
         pg.init()
         # Set the width and height of the screen [width, height]
         self.screen = pg.display.set_mode(self.size)
-        pg.display.set_caption("Connect-",game.connects)
+        pg.display.set_caption("Connect-"+str(game.connects))
 
         # Used to manage how fast the screen updates
         self.clock = pg.time.Clock()
@@ -382,7 +384,7 @@ class connectGUI:
             highlight_image.fill(YELLOW)
             self.highlights.append([highlight_image,highlight_rect])
 
-
+        """
         # -------- Main Program Loop -----------
         disk_dropping=False
         updated_board=True
@@ -414,25 +416,25 @@ class connectGUI:
                                 ball_color=RED
                             else:
                                 ball_color=BLUE
-            screen.fill(BLACK)
+            self.screen.fill(BLACK)
             #Background - highlight column is moused over
             for j in range(self.columns):
-                if highlights[j][1].collidepoint(pg.mouse.get_pos()):
-                    screen.blit(*highlights[j])
+                if self.highlights[j][1].collidepoint(pg.mouse.get_pos()):
+                    self.screen.blit(*self.highlights[j])
             for i in range(self.rows):
                 for j in range(self.columns):
-                    screen.blit(self.grid_space[i][j][0],self.grid_space_rects[i][j])
+                    self.screen.blit(self.grid_space[i][j][0],self.grid_space_rects[i][j])
                     if self.grid_space[i][j][1]==1:
-                        pg.draw.ellipse(screen,RED,self.grid_space_rects[i][j])
+                        pg.draw.ellipse(self.screen,RED,self.grid_space_rects[i][j])
                     elif self.grid_space[i][j][1]==2:
-                        pg.draw.ellipse(screen,BLUE,self.grid_space_rects[i][j])
+                        pg.draw.ellipse(self.screen,BLUE,self.grid_space_rects[i][j])
 
             if disk_dropping==True:
                 if current_coord[1]<end_coord[1]-8:
                     current_coord[1]+=8
                 else:
                     disk_dropping=False
-                pg.draw.ellipse(screen,ball_color,current_coord)
+                pg.draw.ellipse(self.screen,ball_color,current_coord)
             elif updated_board==False:
                 if p1_turn:
                     self.grid_space[action_row][column][1]=1
@@ -444,9 +446,9 @@ class connectGUI:
 
             pg.display.flip()
 
-            clock.tick(60)
+            self.clock.tick(60)
         pg.quit()
-
+        """
 """
 root=Tk()
 my_gui=setup_window(root)

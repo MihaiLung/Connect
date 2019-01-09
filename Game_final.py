@@ -280,7 +280,7 @@ class Player:
         actionlist=game.get_valid_actions()
         if actionlist==[]:
             action_outcome=False
-            return action_outcome
+            #return action_outcome
         #Ensure all actions are equally explored. If the number of simulations is not divisible,
         #by the number of actions, ensure the actions trialed one additional time compared to the
         #minimally explored action are randomly chosen.
@@ -349,7 +349,7 @@ class Player:
         win=game.check_win(self.tick,row_played,column_played)
         draw=game.check_draw()
         game.print_game_state()
-        return win, draw
+        return win, draw, row_played, column_played
 
 
 class Simulation:
