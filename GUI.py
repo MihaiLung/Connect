@@ -16,6 +16,7 @@ YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 
 class setup_window:
+    initialised=False
     def __init__(self, master):
         self.master = master
         master.geometry("400x500") #You want the size of the app to be 500x500
@@ -185,13 +186,10 @@ class setup_window:
         self.dummylabel=Label(self.frame_end_buttons,text="     ")
         self.dummylabel.grid(row=0)
         self.validate_button=Button(self.frame_end_buttons,text="Validate",command=self.validate,height = 1, width = 10)
-        self.play_button=Button(self.frame_end_buttons,text="Play",height = 1, width = 10)
+        self.play_button=Button(self.frame_end_buttons,text="Play",command=self.play,height = 1, width = 10)
         self.validate_button.grid(row=1,column=0,sticky="NSEW")
         self.play_button.grid(row=1,column=1,sticky="NSEW")
         self.frame_end_buttons.pack()
-
-
-
 
 
         """
@@ -217,7 +215,7 @@ class setup_window:
         else:
             vision=self.player2vision
             lto=self.player2_frame_slider
-        if vision.get()<10 and action==1:
+        if vision.get()<5 and action==1:
             vision.set(vision.get()+action)
             if vision.get()>1:
                 lto.grid(row=0,column=player-1)
@@ -244,15 +242,12 @@ class setup_window:
             frame_vision.grid(row=6,column=player-1)
             frame_sims.grid(row=4,column=player-1)
             lto.grid(row=0,column=player-1)
+
     def play(self):
+        self.validate()
         if self.validated==True:
-            global game
-            game=GameBoard(self.rows_label_input,self.cols_label_input,self.connects_label_input)
-            global GUI
-            GUI=Connect_GUI(game.rows, game.columns, game.connects)
-
-
-
+            self.initialised=True
+            self.master.destroy()
         else:
             print("Get yo shit together son")
 
@@ -301,11 +296,12 @@ class setup_window:
 
         if self.player1vision.get()>4 or self.player2vision.get()>4:
             c+=1
-            warnings+="%s. Please " % c
+            warnings+="%s. Please be careful with inputting high Vision values - computation time increases exponentially with each increment of this parameter." % c
 
 
         if warnings=="":
             print("Everything looks good!")
+            self.validated=True
         else:
             print(warnings)
 

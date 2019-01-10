@@ -4,58 +4,6 @@ from tabulate import tabulate
 import copy
 import pygame as pg
 
-class Slot:
-    red=False
-    blue=False
-    def __init__(self, rect, **kwargs):
-        self.process_kwargs(kwargs)
-        self.rect = pg.Rect(rect)
-        self.image = pg.Surface(self.rect.size).convert()
-        #self.function = command
-        self.text = self.font.render(self.text,True,self.font_color)
-        self.text_rect = self.text.get_rect(center=self.rect.center)
-
-
-    def red_play(self,Surface):
-        self.red=True
-
-    def blue_play(self,Surface):
-        self.blue=True
-
-    def process_kwargs(self, kwargs):
-        settings = {
-            'color'         :pg.Color('white'),
-            'text'          :'default',
-            'font'          :pg.font.SysFont('Arial', 16),
-            'hover_color'   :(200,0,0),
-            'font_color'    :pg.Color('white'),
-            'border_color'  :pg.Color('black')
-        }
-        for kwarg in kwargs:
-            if kwarg in settings:
-                settings[kwarg] = kwargs[kwarg]
-            else:
-                raise AttributeError("{} has no keyword: {}".format(self.__class__.__name__, kwarg))
-        self.__dict__.update(settings)
-
-    def is_hovering(self):
-        if self.rect.collidepoint(pg.mouse.get_pos()):
-            return True
-
-    def draw(self, surf):
-        if self.is_hovering():
-            self.image.fill(self.hover_color)
-        else:
-            self.image.fill(self.color)
-        surf.blit(self.text, self.text_rect)
-        surf.blit(self.image, self.rect)
-        if self.red==True:
-            pg.draw.ellipse(surf,pg.Color("red"),self.rect)
-            pg.display.update()
-        if self.blue==True:
-            pg.draw.ellipse(surf,pg.Color("blue"),self.rect)
-            pg.display.update()
-
 
 class GameBoard:
     #Current round tracker
