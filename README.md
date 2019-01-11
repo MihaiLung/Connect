@@ -1,9 +1,4 @@
 # Connect
-Connect game simulation and AI
+Connect game simulation and AI.
 
-Hello.
-Is it me you're looking for? 
-I can see it in your eyes.
-I can see it in your soul.
-You're all I've ever wanted
-And my arms are open wide
+Please execute game_exec.py to play the game. You will need to install and run this on Python 3 and make sure the following packages are installed: numpy, pygame, tkinter, PIL, cv2.
