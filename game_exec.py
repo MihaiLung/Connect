@@ -18,12 +18,7 @@ class Simulation:
         self.get_game_setup()
         self.game=GameBoard(self.rows,self.columns,self.connects)
         self.GUI=connectGUI(self.rows,self.columns)
-        if self.player1.AI==True and self.player2.AI==True:
-            self.play_game()
-        elif self.player1.AI==True or self.player2.AI==True:
-            self.play_game()
-        else:
-            self.playgame_PvP()
+        self.play_game()
 
     def get_game_setup(self):
         self.root=Tk()
