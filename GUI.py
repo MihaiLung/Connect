@@ -6,7 +6,7 @@ from tkinter import *
 import PIL
 from PIL import Image
 import cv2
-from Game_final import GameBoard
+from game_and_AI import GameBoard
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)

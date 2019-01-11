@@ -1,5 +1,5 @@
 from GUI import *
-from Game_final import *
+from game_and_AI import *
 from tkinter import *
 
 BLACK = (0, 0, 0)
@@ -44,115 +44,6 @@ class Simulation:
         self.columns=int(setup.columns.get())
         self.connects=int(setup.connects.get())
 
-        """
-    def play_game(self):
-        #Initialise GUI
-        self.GUI.initialise_game(self.game)
-
-        #Initialise game loop
-        player1_turn=True
-        win=False
-        draw=False
-        lost=False
-        done=False
-        disk_dropping=False
-        updated_board=True
-        player1_turn=True
-        round=1
-        board=copy.deepcopy(self.game.board)
-        GUI_refreshed=True
-        while (win==False and draw==False and lost==False) or disk_dropping:
-            # --- Main event loop
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    done = True
-
-            if not disk_dropping and updated_board and GUI_refreshed:
-                if player1_turn==True:
-                    #Control the value of the vision parameter while the game is still in the initial stages, as its processing load is maximal and information added minimal early on.
-                    if round<self.game.connects*3:
-                        vision=min(self.player1.vision,2)
-                    else:
-                        vision=self.player1.vision
-                    win,draw,row,column=self.player1.make_AI_play(self.game,self.player2,vision)
-                    #Have these display AFTER game is over
-                    if win==True:
-                        print("Player 1 is the winner.")
-                    elif draw==True:
-                        print("The game ended in a draw. Neither player wins.")
-                else:
-                    if round<self.game.connects*3:
-                        vision=min(self.player2.vision,2)
-                    else:
-                        vision=self.player2.vision
-                    lost,draw,row,column=self.player2.make_AI_play(self.game,self.player1,vision)
-                    if lost==True:
-                        print("Player 2 is the winner.")
-                    elif draw==True:
-                        print("The game ended in a draw. Neither player wins.")
-                disk_dropping=True
-                updated_board=False
-                if player1_turn:
-                    ball_color=RED
-                else:
-                    ball_color=BLUE
-                current_coord,end_coord=self.GUI.get_disk_trajectory(row,column)
-                player1_turn=not player1_turn
-                #Increment round tracker
-                round+=1
-
-            self.GUI.screen.fill(BLACK)
-            #Highlight column if moused over
-            for j in range(self.columns):
-                if self.GUI.highlights[j][1].collidepoint(pg.mouse.get_pos()):
-                    self.GUI.screen.blit(*self.GUI.highlights[j])
-
-            #Draw main board
-            for i in range(self.rows):
-                for j in range(self.columns):
-                    self.GUI.screen.blit(self.GUI.grid_space[i][j][0],self.GUI.grid_space_rects[i][j])
-                    if board[i][j]==1:
-                        pg.draw.ellipse(self.GUI.screen,RED,self.GUI.grid_space_rects[i][j])
-                    elif board[i][j]==-1:
-                        pg.draw.ellipse(self.GUI.screen,BLUE,self.GUI.grid_space_rects[i][j])
-            GUI_refreshed=True
-
-            #Disk dropping animation
-            if disk_dropping==True:
-                if current_coord[1]<end_coord[1]-8:
-                    current_coord[1]+=8
-                else:
-                    disk_dropping=False
-                pg.draw.ellipse(self.GUI.screen,ball_color,current_coord)
-            elif updated_board==False:
-                board=copy.deepcopy(self.game.board)
-                updated_board=True
-                GUI_refreshed=False
-
-            pg.display.flip()
-
-            self.GUI.clock.tick(60)
-        while not done:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    done = True
-            #Highlight column if moused over
-            for j in range(self.columns):
-                if self.GUI.highlights[j][1].collidepoint(pg.mouse.get_pos()):
-                    self.GUI.screen.blit(*self.GUI.highlights[j])
-
-            #Draw main board
-            for i in range(self.rows):
-                for j in range(self.columns):
-                    self.GUI.screen.blit(self.GUI.grid_space[i][j][0],self.GUI.grid_space_rects[i][j])
-                    if board[i][j]==1:
-                        pg.draw.ellipse(self.GUI.screen,RED,self.GUI.grid_space_rects[i][j])
-                    elif board[i][j]==-1:
-                        pg.draw.ellipse(self.GUI.screen,BLUE,self.GUI.grid_space_rects[i][j])
-        pg.quit()
-
-"""
-
 
     def play_game(self):
 
@@ -172,7 +63,7 @@ class Simulation:
         board=copy.deepcopy(self.game.board)
         GUI_refreshed=True
 
-        while (win==False and draw==False and lost==False) or not GUI_refreshed:
+        while (win==False and draw==False and lost==False) or (not GUI_refreshed) or not updated_board:
             #Replace disk_dropping with board updated flag
             # --- Main event loop
             for event in pg.event.get():
@@ -218,6 +109,7 @@ class Simulation:
                         print("The game ended in a draw. Neither player wins.")
                     disk_dropping=True
                     updated_board=False
+                    GUI_refreshed=False
                     ball_color=RED
                     current_coord,end_coord=self.GUI.get_disk_trajectory(row,column)
                     player1_turn=not player1_turn
@@ -233,6 +125,7 @@ class Simulation:
                         print("The game ended in a draw. Neither player wins.")
                     disk_dropping=True
                     updated_board=False
+                    GUI_refreshed=False
                     ball_color=BLUE
                     current_coord,end_coord=self.GUI.get_disk_trajectory(row,column)
                     player1_turn=not player1_turn
