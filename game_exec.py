@@ -1,6 +1,6 @@
 from GUI import *
 from Game_final import *
-from Tkinter import *
+from tkinter import *
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -40,13 +40,11 @@ class Simulation:
         self.player2.lto=float(setup.player2_LTO.get())/100
         self.player2.numsims=setup.player2sims.get()
 
-        for p in [self.player1,self.player2]:
-            print p.AI, p.vision, p.lto, p.numsims
-
         self.rows=int(setup.rows.get())
         self.columns=int(setup.columns.get())
         self.connects=int(setup.connects.get())
-"""
+
+        """
     def play_game(self):
         #Initialise GUI
         self.GUI.initialise_game(self.game)

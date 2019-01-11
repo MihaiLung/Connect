@@ -1,8 +1,8 @@
 
 import pygame as pg
 import copy
-import Tkinter as tk
-from Tkinter import *
+import tkinter as tk
+from tkinter import *
 import PIL
 from PIL import Image
 import cv2
@@ -70,8 +70,8 @@ class setup_window:
         self.button_height=20
         self.button_width=self.button_height
 
-        self.UpPhoto=PhotoImage(file="open.pgm")
-        self.DownPhoto=PhotoImage(file="close.pgm")
+        self.UpPhoto=PhotoImage(file="open.png")
+        self.DownPhoto=PhotoImage(file="close.png")
 
         self.player1vision= IntVar(None, 2)
         self.player2vision= IntVar(None, 2)
